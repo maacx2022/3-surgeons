@@ -15,6 +15,7 @@ from typing import Callable, Dict, List, Optional, Protocol, Tuple, runtime_chec
 import httpx
 
 from three_surgeons.core.config import SurgeonConfig
+from three_surgeons.core.config import is_local_provider
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +41,9 @@ def strip_think_tags(text: str) -> str:
 
 PRICING: Dict[str, Tuple[float, float]] = {
     # OpenAI
+    "gpt-5.2": (1.75, 14.00),
+    "gpt-5.1": (1.25, 10.00),
+    "gpt-5": (1.25, 10.00),
     "gpt-4.1": (2.00, 8.00),
     "gpt-4.1-mini": (0.40, 1.60),
     "gpt-4.1-nano": (0.10, 0.40),
@@ -147,7 +151,7 @@ class LLMProvider:
         self.endpoint: str = config.endpoint.rstrip("/")
         self.model: str = config.model
         self._api_key: Optional[str] = config.get_api_key()
-        self._is_local: bool = config.provider in ("ollama", "mlx", "local", "vllm", "lmstudio")
+        self._is_local: bool = is_local_provider(config.provider)
         self._adapter = query_adapter
         self._fallbacks: List[SurgeonConfig] = fallbacks or []
         self._max_retries: int = max_retries
@@ -204,7 +208,7 @@ class LLMProvider:
 
         # Try fallback providers
         for fb_config in self._fallbacks:
-            fb_is_local = fb_config.provider in ("ollama", "mlx", "local", "vllm", "lmstudio")
+            fb_is_local = is_local_provider(fb_config.provider)
             fb_key = fb_config.get_api_key()
             fb_endpoint = fb_config.endpoint.rstrip("/")
             logger.info("Falling back to %s (%s)", fb_config.provider, fb_config.model)

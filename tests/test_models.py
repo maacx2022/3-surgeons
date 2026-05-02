@@ -14,7 +14,7 @@ class TestResponseFields:
             ok=True,
             content="Hello world",
             latency_ms=150,
-            model="gpt-4.1-mini",
+            model="gpt-5.2",
             cost_usd=0.001,
             tokens_in=50,
             tokens_out=20,
@@ -22,7 +22,7 @@ class TestResponseFields:
         assert resp.ok is True
         assert resp.content == "Hello world"
         assert resp.latency_ms == 150
-        assert resp.model == "gpt-4.1-mini"
+        assert resp.model == "gpt-5.2"
         assert resp.cost_usd == 0.001
         assert resp.tokens_in == 50
         assert resp.tokens_out == 20
@@ -42,10 +42,10 @@ class TestFailedResponse:
 
     def test_failed_response(self) -> None:
         """LLMResponse.error() returns ok=False with the error message as content."""
-        resp = LLMResponse.error("connection refused", model="gpt-4.1-mini")
+        resp = LLMResponse.error("connection refused", model="gpt-5.2")
         assert resp.ok is False
         assert resp.content == "connection refused"
-        assert resp.model == "gpt-4.1-mini"
+        assert resp.model == "gpt-5.2"
 
     def test_failed_response_default_model(self) -> None:
         """LLMResponse.error() with no model defaults to empty string."""
@@ -63,33 +63,33 @@ class TestCreateOpenAIProvider:
         config = SurgeonConfig(
             provider="openai",
             endpoint="https://api.openai.com/v1",
-            model="gpt-4.1-mini",
-            api_key_env="Context_DNA_OPENAI",
+            model="gpt-5.2",
+            api_key_env="OPENAI_API_KEY",
             role="test",
         )
         provider = create_provider(config)
         assert isinstance(provider, LLMProvider)
-        assert provider.model == "gpt-4.1-mini"
+        assert provider.model == "gpt-5.2"
         assert provider.endpoint == "https://api.openai.com/v1"
         assert provider._is_local is False
 
 
-class TestCreateOllamaProvider:
-    """Test creating a provider from an Ollama-style SurgeonConfig."""
+class TestCreateLlamaCppProvider:
+    """Test creating a provider from a llama.cpp-style SurgeonConfig."""
 
-    def test_create_ollama_provider(self) -> None:
-        """Create LLMProvider from ollama config, verify fields and _is_local."""
+    def test_create_llamacpp_provider(self) -> None:
+        """Create LLMProvider from llama.cpp config, verify fields and _is_local."""
         config = SurgeonConfig(
-            provider="ollama",
-            endpoint="http://localhost:11434/v1",
-            model="qwen3:4b",
+            provider="llamacpp",
+            endpoint="http://127.0.0.1:8080/v1",
+            model="gpt-oss-20b",
             api_key_env="",
             role="local",
         )
         provider = create_provider(config)
         assert isinstance(provider, LLMProvider)
-        assert provider.model == "qwen3:4b"
-        assert provider.endpoint == "http://localhost:11434/v1"
+        assert provider.model == "gpt-oss-20b"
+        assert provider.endpoint == "http://127.0.0.1:8080/v1"
         assert provider._is_local is True
 
 
@@ -97,19 +97,19 @@ class TestCostCalculation:
     """Test the estimate_cost function."""
 
     def test_openai_cost_calculation(self) -> None:
-        """estimate_cost for gpt-4.1-mini with known token counts.
+        """estimate_cost for gpt-5.2 with known token counts.
 
-        Pricing: (0.40, 1.60) per 1M tokens.
-        1000 tokens in  = 1000 * 0.40 / 1_000_000 = 0.0004
-        500 tokens out  = 500 * 1.60 / 1_000_000 = 0.0008
-        Total = 0.0012
+        Pricing: (1.75, 14.00) per 1M tokens.
+        1000 tokens in  = 1000 * 1.75 / 1_000_000 = 0.00175
+        500 tokens out  = 500 * 14.00 / 1_000_000 = 0.007
+        Total = 0.00875
         """
-        cost = estimate_cost("gpt-4.1-mini", tokens_in=1000, tokens_out=500)
-        assert cost == pytest.approx(0.0012)
+        cost = estimate_cost("gpt-5.2", tokens_in=1000, tokens_out=500)
+        assert cost == pytest.approx(0.00875)
 
     def test_local_model_zero_cost(self) -> None:
-        """estimate_cost for qwen3:4b (unknown/local model) returns 0.0."""
-        cost = estimate_cost("qwen3:4b", tokens_in=5000, tokens_out=2000)
+        """estimate_cost for gpt-oss-20b (unknown/local model) returns 0.0."""
+        cost = estimate_cost("gpt-oss-20b", tokens_in=5000, tokens_out=2000)
         assert cost == 0.0
 
     def test_gpt41_cost(self) -> None:
@@ -125,7 +125,7 @@ class TestCostCalculation:
 
     def test_zero_tokens_zero_cost(self) -> None:
         """estimate_cost with zero tokens returns 0.0 even for known models."""
-        cost = estimate_cost("gpt-4.1-mini", tokens_in=0, tokens_out=0)
+        cost = estimate_cost("gpt-5.2", tokens_in=0, tokens_out=0)
         assert cost == 0.0
 
 
@@ -137,8 +137,8 @@ class TestProviderEndpointStripping:
         config = SurgeonConfig(
             provider="openai",
             endpoint="https://api.openai.com/v1/",
-            model="gpt-4.1-mini",
-            api_key_env="Context_DNA_OPENAI",
+            model="gpt-5.2",
+            api_key_env="OPENAI_API_KEY",
             role="test",
         )
         provider = create_provider(config)

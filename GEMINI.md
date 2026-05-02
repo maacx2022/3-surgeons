@@ -7,7 +7,7 @@ Three AI surgeons. One operating table. Your code doesn't ship until all three a
 ### 1. Install the extension
 
 ```bash
-gemini extensions install https://github.com/supportersimulator/3-surgeons
+gemini extensions install https://github.com/maacx2022/3-surgeons --ref main
 ```
 
 ### 2. Install Python runtime
@@ -25,13 +25,13 @@ python3 -m venv .venv
 Copy a preset to your home config:
 
 ```bash
-# Hybrid (default) — OpenAI cardiologist + local Ollama neurologist
+# Hybrid (default) — OpenAI cardiologist + local llama.cpp neurologist
 cp config/presets/hybrid.yaml ~/.3surgeons/config.yaml
 
 # API-only — OpenAI + DeepSeek, no local model needed
 cp config/presets/api-only.yaml ~/.3surgeons/config.yaml
 
-# Local-only — all Ollama, $0 cost, fully private
+# Local-only — all llama.cpp, $0 cost, fully private
 cp config/presets/local-only.yaml ~/.3surgeons/config.yaml
 ```
 
@@ -108,7 +108,7 @@ Once connected, these MCP tools are available in Gemini:
 
 **Surgeon unreachable**
 - Run `probe` to see which surgeon is down
-- For local models: ensure Ollama is running (`ollama serve`)
+ - For local models: ensure `llama.cpp` server is running (`llama-server -m <model>.gguf --port 8080`)
 - For API models: verify API key is set in environment
 
 **Auto-bootstrap failed**
@@ -116,6 +116,6 @@ Once connected, these MCP tools are available in Gemini:
 
 ## More information
 
-- [Full documentation](https://github.com/supportersimulator/3-surgeons)
-- [Configuration presets](https://github.com/supportersimulator/3-surgeons/tree/main/config/presets)
-- [Skill reference](https://github.com/supportersimulator/3-surgeons/tree/main/skills)
+- [Full documentation](https://github.com/maacx2022/3-surgeons)
+- [Configuration presets](https://github.com/maacx2022/3-surgeons/tree/main/config/presets)
+- [Skill reference](https://github.com/maacx2022/3-surgeons/tree/main/skills)

@@ -25,7 +25,7 @@ _SUBPROCESS_TIMEOUT = 10  # seconds
 
 # All API providers and their standard env var names
 PROVIDER_KEY_MAP: Dict[str, str] = {
-    "openai": "Context_DNA_OPENAI",
+    "openai": "OPENAI_API_KEY",
     "anthropic": "ANTHROPIC_API_KEY",
     "google": "GOOGLE_API_KEY",
     "deepseek": "Context_DNA_Deepseek",
@@ -38,7 +38,7 @@ PROVIDER_KEY_MAP: Dict[str, str] = {
 }
 
 # Providers that run locally and need no API key
-LOCAL_PROVIDERS = {"ollama", "mlx", "vllm", "lmstudio"}
+LOCAL_PROVIDERS = {"llamacpp", "ollama", "mlx", "vllm", "lmstudio"}
 
 
 @dataclass

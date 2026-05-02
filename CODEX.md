@@ -6,7 +6,7 @@ Setup guide for using 3-Surgeons with [Codex CLI](https://github.com/openai/code
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/supportersimulator/3-surgeons.git ~/.3surgeons/plugin
+git clone https://github.com/maacx2022/3-surgeons.git ~/.3surgeons/plugin
 
 # 2. Create venv and install
 cd ~/.3surgeons/plugin
@@ -72,7 +72,7 @@ All three surgeons should report reachable.
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `OPENAI_API_KEY` | Yes (hybrid/API mode) | OpenAI key for Cardiologist (GPT-4.1-mini) |
-| `OLLAMA_HOST` | No | Ollama endpoint for local Neurologist (default: `http://127.0.0.1:11434`) |
+| Local llama.cpp endpoint | No | Set the llama.cpp server URL in the preset or config (default: `http://127.0.0.1:8080/v1`) |
 | `DEEPSEEK_API_KEY` | No | DeepSeek key for API-Only mode Neurologist |
 
 Set these in your shell profile (`~/.zshrc`, `~/.bashrc`) or pass via Codex:
@@ -85,9 +85,9 @@ codex mcp add 3-surgeons --env OPENAI_API_KEY=sk-... -- ~/.3surgeons/plugin/bin/
 
 Works the same as all other IDEs. Pick one:
 
-- **Hybrid** (default) — OpenAI + local Ollama. 1 API key. ~$0.003/query.
+- **Hybrid** (default) — OpenAI GPT-5.2 + local llama.cpp. 1 API key. ~$0.008/query.
 - **API-Only** — OpenAI + DeepSeek. 2 API keys. ~$0.005/query.
-- **Local-Only** — Ollama only. $0.
+- **Local-Only** — llama.cpp only. $0.
 
 Run `3s init` to configure, or copy a preset:
 
@@ -109,7 +109,7 @@ cp ~/.3surgeons/plugin/config/presets/api-only.yaml ~/.3surgeons/config.yaml
 **Surgeon unreachable**
 - Run `3s probe` to see which surgeon fails
 - Check `OPENAI_API_KEY` is set in the environment Codex runs in
-- For local Neurologist: ensure Ollama is running (`ollama serve`)
+- For local Neurologist: ensure `llama.cpp` server is running (`llama-server -m <model>.gguf --port 8080`)
 
 **Windows**
 - The `bin/3surgeons-mcp` launcher is Bash. On Windows, call Python directly:

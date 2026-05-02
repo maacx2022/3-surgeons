@@ -270,8 +270,8 @@ class TestConfigDiscoveryIntegration:
         # Isolate from real ~/.3surgeons/config.yaml on the host machine
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
         config = Config.discover(project_dir=tmp_path)
-        assert config.cardiologist.model == "gpt-4.1-mini"
-        assert config.neurologist.model == "qwen3:4b"
+        assert config.cardiologist.model == "gpt-5.2"
+        assert config.neurologist.model == "gpt-oss-20b"
         assert config.budgets.daily_external_usd == 5.0
 
     def test_project_config_overrides_defaults(self, tmp_path, monkeypatch):
@@ -296,7 +296,7 @@ class TestConfigDiscoveryIntegration:
         assert config.cardiologist.model == "gpt-4.1"
         assert config.budgets.daily_external_usd == 10.0
         # Neurologist should still be default
-        assert config.neurologist.model == "qwen3:4b"
+        assert config.neurologist.model == "gpt-oss-20b"
 
     def test_config_round_trip_from_yaml(self, tmp_path):
         """Config written to YAML and read back should preserve values."""

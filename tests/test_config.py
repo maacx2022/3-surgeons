@@ -20,14 +20,14 @@ class TestLoadFromYaml:
                 "cardiologist": {
                     "provider": "openai",
                     "endpoint": "https://api.openai.com/v1",
-                    "model": "gpt-4.1-mini",
-                    "api_key_env": "Context_DNA_OPENAI",
+                    "model": "gpt-5.2",
+                    "api_key_env": "OPENAI_API_KEY",
                     "role": "External perspective",
                 },
                 "neurologist": {
-                    "provider": "ollama",
-                    "endpoint": "http://localhost:11434/v1",
-                    "model": "qwen3:4b",
+                    "provider": "llamacpp",
+                    "endpoint": "http://127.0.0.1:8080/v1",
+                    "model": "gpt-oss-20b",
                     "role": "Local intelligence",
                 },
             },
@@ -46,13 +46,13 @@ class TestLoadFromYaml:
 
         assert cfg.cardiologist.provider == "openai"
         assert cfg.cardiologist.endpoint == "https://api.openai.com/v1"
-        assert cfg.cardiologist.model == "gpt-4.1-mini"
-        assert cfg.cardiologist.api_key_env == "Context_DNA_OPENAI"
+        assert cfg.cardiologist.model == "gpt-5.2"
+        assert cfg.cardiologist.api_key_env == "OPENAI_API_KEY"
         assert cfg.cardiologist.role == "External perspective"
 
-        assert cfg.neurologist.provider == "ollama"
-        assert cfg.neurologist.endpoint == "http://localhost:11434/v1"
-        assert cfg.neurologist.model == "qwen3:4b"
+        assert cfg.neurologist.provider == "llamacpp"
+        assert cfg.neurologist.endpoint == "http://127.0.0.1:8080/v1"
+        assert cfg.neurologist.model == "gpt-oss-20b"
         assert cfg.neurologist.role == "Local intelligence"
 
         assert cfg.budgets.daily_external_usd == 10.0
@@ -69,12 +69,12 @@ class TestLoadDefaults:
 
         # Defaults from the spec
         assert cfg.cardiologist.provider == "openai"
-        assert cfg.cardiologist.model == "gpt-4.1-mini"
-        assert cfg.cardiologist.api_key_env == "Context_DNA_OPENAI"
+        assert cfg.cardiologist.model == "gpt-5.2"
+        assert cfg.cardiologist.api_key_env == "OPENAI_API_KEY"
 
-        assert cfg.neurologist.provider == "ollama"
-        assert cfg.neurologist.model == "qwen3:4b"
-        assert cfg.neurologist.endpoint == "http://localhost:11434/v1"
+        assert cfg.neurologist.provider == "llamacpp"
+        assert cfg.neurologist.model == "gpt-oss-20b"
+        assert cfg.neurologist.endpoint == "http://127.0.0.1:8080/v1"
 
         assert cfg.budgets.daily_external_usd == 5.0
         assert cfg.budgets.autonomous_ab_usd == 2.0
@@ -91,7 +91,7 @@ class TestApiKey:
         surgeon = SurgeonConfig(
             provider="openai",
             endpoint="https://api.openai.com/v1",
-            model="gpt-4.1-mini",
+            model="gpt-5.2",
             api_key_env="TEST_API_KEY_XYZ",
             role="test",
         )
@@ -103,7 +103,7 @@ class TestApiKey:
         surgeon = SurgeonConfig(
             provider="openai",
             endpoint="https://api.openai.com/v1",
-            model="gpt-4.1-mini",
+            model="gpt-5.2",
             api_key_env="NONEXISTENT_KEY_VAR",
             role="test",
         )
@@ -115,7 +115,7 @@ class TestApiKey:
         surgeon = SurgeonConfig(
             provider="openai",
             endpoint="https://api.openai.com/v1",
-            model="gpt-4.1-mini",
+            model="gpt-5.2",
             api_key_env="SHORT_KEY_VAR",
             role="test",
         )
@@ -136,7 +136,7 @@ class TestConfigDiscovery:
         home_config.write_text(yaml.dump({
             "surgeons": {
                 "cardiologist": {
-                    "model": "gpt-4o-from-home",
+                    "model": "gpt-5.2-from-home",
                 },
             },
         }))
@@ -148,7 +148,7 @@ class TestConfigDiscovery:
         project_config.write_text(yaml.dump({
             "surgeons": {
                 "cardiologist": {
-                    "model": "gpt-4o-from-project",
+                    "model": "gpt-5.2-from-project",
                 },
             },
         }))
@@ -159,7 +159,7 @@ class TestConfigDiscovery:
         cfg = Config.discover(project_dir=project_dir)
 
         # Project config should win over home config
-        assert cfg.cardiologist.model == "gpt-4o-from-project"
+        assert cfg.cardiologist.model == "gpt-5.2-from-project"
 
     def test_config_discovery_falls_to_home(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         """No project config, verify home config is used."""
@@ -171,7 +171,7 @@ class TestConfigDiscovery:
         home_config.write_text(yaml.dump({
             "surgeons": {
                 "cardiologist": {
-                    "model": "gpt-4o-from-home",
+                    "model": "gpt-5.2-from-home",
                 },
             },
         }))
@@ -184,7 +184,7 @@ class TestConfigDiscovery:
 
         cfg = Config.discover(project_dir=project_dir)
 
-        assert cfg.cardiologist.model == "gpt-4o-from-home"
+        assert cfg.cardiologist.model == "gpt-5.2-from-home"
 
     def test_config_discovery_falls_to_defaults(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
         """No config files anywhere, verify defaults are returned."""
@@ -199,8 +199,8 @@ class TestConfigDiscovery:
         cfg = Config.discover(project_dir=project_dir)
 
         # Should be defaults
-        assert cfg.cardiologist.model == "gpt-4.1-mini"
-        assert cfg.neurologist.model == "qwen3:4b"
+        assert cfg.cardiologist.model == "gpt-5.2"
+        assert cfg.neurologist.model == "gpt-oss-20b"
 
 
 class TestEvidencePath:
@@ -276,8 +276,8 @@ def test_preset_local_only_loads():
     preset = Path(__file__).parent.parent / "config" / "presets" / "local-only.yaml"
     assert preset.exists(), "local-only.yaml preset missing"
     cfg = Config.from_yaml(preset)
-    assert cfg.cardiologist.provider == "local"
-    assert cfg.neurologist.provider == "local"
+    assert cfg.cardiologist.provider == "llamacpp"
+    assert cfg.neurologist.provider == "llamacpp"
 
 
 def test_preset_hybrid_loads():
@@ -286,7 +286,7 @@ def test_preset_hybrid_loads():
     assert preset.exists(), "hybrid.yaml preset missing"
     cfg = Config.from_yaml(preset)
     assert cfg.cardiologist.provider == "openai"
-    assert cfg.neurologist.provider == "ollama"
+    assert cfg.neurologist.provider == "llamacpp"
 
 
 class TestReviewConfig:

@@ -7,17 +7,17 @@ surgeons:
 
   cardiologist:
     role: "External perspective — cross-examination, evidence"
-    # Supported providers: openai, deepseek, groq, mistral, xai, ollama, mlx, local
+    # Supported providers: openai, deepseek, groq, mistral, xai, llamacpp, mlx, local
     provider: openai
     endpoint: https://api.openai.com/v1
-    model: gpt-4.1-mini
-    api_key_env: Context_DNA_OPENAI
+    model: gpt-5.2
+    api_key_env: OPENAI_API_KEY
 
   neurologist:
     role: "Local intelligence — pattern recognition, corrigibility"
-    provider: ollama
-    endpoint: http://localhost:11434/v1
-    model: qwen3:4b
+    provider: llamacpp
+    endpoint: http://127.0.0.1:8080/v1
+    model: gpt-oss-20b
     # api_key_env: not needed for local models
 
 # State backend: sqlite (default, zero deps) | redis (distributed) | memory (testing)

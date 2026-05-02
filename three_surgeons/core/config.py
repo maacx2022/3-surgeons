@@ -17,11 +17,19 @@ import httpx
 
 # Known local LLM backends: (provider_name, default_port, models_endpoint_path)
 LOCAL_BACKENDS = [
+    ("llamacpp", 8080, "/v1/models"),
     ("ollama", 11434, "/v1/models"),
     ("mlx", 5044, "/v1/models"),
     ("vllm", 8000, "/v1/models"),
     ("lmstudio", 1234, "/v1/models"),
 ]
+
+LOCAL_PROVIDER_NAMES = {"llamacpp", "ollama", "mlx", "local", "vllm", "lmstudio"}
+
+
+def is_local_provider(provider: str) -> bool:
+    """Return True for providers backed by a local OpenAI-compatible server."""
+    return provider in LOCAL_PROVIDER_NAMES
 
 
 def detect_local_backend(timeout_s: float = 2.0) -> list[dict]:
@@ -68,18 +76,31 @@ class SurgeonConfig:
         """Read API key from the environment variable.
 
         Returns None if the env var is missing or the value is < 6 characters.
-        For DeepSeek, falls back through multiple env var names + DEEPSEEK_API_KEY.
+        Falls back through provider-specific environment variable names when
+        api_key_env is unset or unavailable.
         """
-        value = os.environ.get(self.api_key_env)
-        if (value is None or len(value) < 6) and self.provider == "deepseek":
-            # Fallback chain for DeepSeek key
-            for alt in ("Context_DNA_Deep_Seek", "Context_DNA_Deepseek", "DEEPSEEK_API_KEY"):
-                v = os.environ.get(alt)
-                if v and len(v) >= 6:
-                    return v
-        if value is None or len(value) < 6:
-            return None
-        return value
+        candidates = []
+        if self.api_key_env:
+            candidates.append(self.api_key_env)
+
+        provider_fallbacks = {
+            "openai": ["OPENAI_API_KEY", "Context_DNA_OPENAI"],
+            "deepseek": ["Context_DNA_Deep_Seek", "Context_DNA_Deepseek", "DEEPSEEK_API_KEY"],
+            "groq": ["GROQ_API_KEY"],
+            "xai": ["XAI_API_KEY"],
+            "mistral": ["MISTRAL_API_KEY"],
+        }
+        candidates.extend(provider_fallbacks.get(self.provider, []))
+
+        seen = set()
+        for env_name in candidates:
+            if not env_name or env_name in seen:
+                continue
+            seen.add(env_name)
+            value = os.environ.get(env_name)
+            if value and len(value) >= 6:
+                return value
+        return None
 
     def get_fallback_configs(self) -> List["SurgeonConfig"]:
         """Convert fallback dicts from YAML into SurgeonConfig objects."""
@@ -223,8 +244,8 @@ def _default_cardiologist() -> "SurgeonConfig":
     return SurgeonConfig(
         provider="openai",
         endpoint="https://api.openai.com/v1",
-        model="gpt-4.1-mini",
-        api_key_env="Context_DNA_OPENAI",
+        model="gpt-5.2",
+        api_key_env="OPENAI_API_KEY",
         role="External perspective -- cross-examination, evidence",
     )
 
@@ -239,9 +260,9 @@ class Config:
 
     cardiologist: SurgeonConfig = field(default_factory=lambda: _default_cardiologist())
     neurologist: SurgeonConfig = field(default_factory=lambda: SurgeonConfig(
-        provider="ollama",
-        endpoint="http://localhost:11434/v1",
-        model="qwen3:4b",
+        provider="llamacpp",
+        endpoint="http://127.0.0.1:8080/v1",
+        model="gpt-oss-20b",
         api_key_env="",
         role="Local intelligence -- pattern recognition, corrigibility",
     ))

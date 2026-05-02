@@ -1,18 +1,18 @@
 # 3-Surgeons: Generic Local Mode
 # Both surgeons use any OpenAI-compatible local server. $0 cost.
-# Works with: MLX, vLLM, LM Studio, Ollama, or any /v1/chat/completions endpoint.
+# Works with llama.cpp, MLX, vLLM, LM Studio, or any /v1/chat/completions endpoint.
 # Required: Local LLM server running. Run '3s init' to auto-detect.
 surgeons:
   cardiologist:
     role: "External perspective — cross-examination, evidence"
-    provider: local
-    endpoint: http://127.0.0.1:5044/v1
-    model: default
+    provider: llamacpp
+    endpoint: http://127.0.0.1:8080/v1
+    model: gpt-oss-20b
   neurologist:
     role: "Local intelligence — pattern recognition, corrigibility"
-    provider: local
-    endpoint: http://127.0.0.1:5044/v1
-    model: default
+    provider: llamacpp
+    endpoint: http://127.0.0.1:8080/v1
+    model: gpt-oss-20b
 
 state:
   backend: sqlite

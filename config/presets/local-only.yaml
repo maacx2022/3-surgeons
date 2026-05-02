@@ -1,18 +1,18 @@
 # 3-Surgeons: Local-Only Mode
-# Both surgeons use local LLM models. No API keys needed. $0 cost.
-# Works with: Ollama, MLX, LM Studio, vLLM, or any /v1/chat/completions endpoint.
-# Run '3s init' to auto-detect your local backend and models.
+# Both surgeons use local llama.cpp-backed models. No API keys needed. $0 cost.
+# Works with any OpenAI-compatible /v1/chat/completions endpoint, including llama.cpp.
+# Run '3s init' to auto-detect your local backend and model aliases.
 surgeons:
   cardiologist:
     role: "External perspective — cross-examination, evidence"
-    provider: local
-    endpoint: http://127.0.0.1:5044/v1
-    model: default
+    provider: llamacpp
+    endpoint: http://127.0.0.1:8080/v1
+    model: gpt-oss-20b
   neurologist:
     role: "Local intelligence — pattern recognition, corrigibility"
-    provider: local
-    endpoint: http://127.0.0.1:5044/v1
-    model: default
+    provider: llamacpp
+    endpoint: http://127.0.0.1:8080/v1
+    model: gpt-oss-20b
 
 state:
   backend: sqlite

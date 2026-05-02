@@ -84,8 +84,8 @@ The `3s init` wizard will check your Python version and guide you if it's too ol
 
 ```bash
 # 1. Install (Claude Code)
-/plugin marketplace add supportersimulator/3-surgeons
-/plugin install 3-surgeons@supportersimulator/3-surgeons
+/plugin marketplace add maacx2022/3-surgeons
+/plugin install 3-surgeons@maacx2022/3-surgeons
 
 # 2. Run the setup wizard
 3s init
@@ -105,8 +105,8 @@ export OPENAI_API_KEY=sk-...
 ### Claude Code (Marketplace)
 
 ```bash
-/plugin marketplace add supportersimulator/3-surgeons
-/plugin install 3-surgeons@supportersimulator/3-surgeons
+/plugin marketplace add maacx2022/3-surgeons
+/plugin install 3-surgeons@maacx2022/3-surgeons
 ```
 
 ### VS Code (Agent Plugin — requires 1.110+)
@@ -124,7 +124,7 @@ Open Settings (`Cmd+,` / `Ctrl+,`) and add these to your `settings.json`:
 ```json
 {
   "chat.plugins.enabled": true,
-  "chat.plugins.marketplaces": ["supportersimulator/3-surgeons"]
+  "chat.plugins.marketplaces": ["maacx2022/3-surgeons"]
 }
 ```
 
@@ -139,7 +139,7 @@ Open Settings (`Cmd+,` / `Ctrl+,`) and add these to your `settings.json`:
 The MCP tools need Python 3.10+ with the package installed:
 
 ```bash
-git clone https://github.com/supportersimulator/3-surgeons.git ~/3-surgeons
+git clone https://github.com/maacx2022/3-surgeons.git ~/3-surgeons
 cd ~/3-surgeons
 python3 -m venv .venv && .venv/bin/pip install -e '.[mcp]'
 ```
@@ -159,13 +159,13 @@ Add the cloned path directly in `settings.json`:
 ### Cursor
 
 ```bash
-cursor plugin add supportersimulator/3-surgeons
+cursor plugin add maacx2022/3-surgeons
 ```
 
 ### Codex CLI / Codex IDE Extension
 
 ```bash
-git clone https://github.com/supportersimulator/3-surgeons.git ~/.3surgeons/plugin
+git clone https://github.com/maacx2022/3-surgeons.git ~/.3surgeons/plugin
 cd ~/.3surgeons/plugin
 python3 -m venv .venv && .venv/bin/pip install -e '.[mcp]'
 codex mcp add 3-surgeons -- ~/.3surgeons/plugin/bin/3surgeons-mcp
@@ -176,7 +176,7 @@ See [CODEX.md](CODEX.md) for full setup, config options, and troubleshooting.
 ### Gemini CLI
 
 ```bash
-gemini extensions install https://github.com/supportersimulator/3-surgeons
+gemini extensions install https://github.com/maacx2022/3-surgeons
 ```
 
 See [GEMINI.md](GEMINI.md) for full setup, backend configuration, and troubleshooting.
@@ -184,7 +184,7 @@ See [GEMINI.md](GEMINI.md) for full setup, backend configuration, and troublesho
 ### Manual (any IDE)
 
 ```bash
-git clone https://github.com/supportersimulator/3-surgeons.git ~/.claude/plugins/3-surgeons
+git clone https://github.com/maacx2022/3-surgeons.git ~/.claude/plugins/3-surgeons
 cd ~/.claude/plugins/3-surgeons
 python3 -m venv .venv && .venv/bin/pip install -e '.[mcp]'
 ```
@@ -208,9 +208,9 @@ All tools available via `3s serve` HTTP bridge. See `three_surgeons/config/ide-a
 
 | Mode | Cardiologist | Neurologist | Needs | Cost |
 |------|-------------|-------------|-------|------|
-| **Hybrid** (default) | OpenAI GPT-4.1-mini | Local Ollama qwen3:4b | 1 API key + Ollama | ~$0.003/query |
-| **API-Only** | OpenAI GPT-4.1-mini | DeepSeek deepseek-chat | 2 API keys | ~$0.005/query |
-| **Local-Only** | Ollama mistral:7b | Ollama qwen3:4b | Ollama installed | $0 |
+| **Hybrid** (default) | OpenAI GPT-5.2 | Local llama.cpp gpt-oss-20b | 1 API key + llama.cpp | ~$0.008/query |
+| **API-Only** | OpenAI GPT-5.2 | DeepSeek deepseek-reasoner | 2 API keys | ~$0.02/query |
+| **Local-Only** | llama.cpp gpt-oss-20b | llama.cpp gpt-oss-20b | llama.cpp server | $0 |
 
 Run `3s init` to pick a mode, or copy a preset directly:
 
@@ -224,7 +224,7 @@ Any endpoint implementing OpenAI's `/v1/chat/completions` API works with zero co
 
 **Cloud:** OpenAI, DeepSeek, Groq, Grok (xAI), Mistral
 
-**Local:** Ollama, LM Studio, vLLM, MLX
+**Local:** llama.cpp, LM Studio, vLLM, MLX
 
 See the [full provider matrix](skills/using-3-surgeons/SKILL.md#supported-providers) for endpoints, models, and pricing.
 
