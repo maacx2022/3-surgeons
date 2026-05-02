@@ -204,7 +204,7 @@ class TestDiagnoseAuth:
 
     def test_local_provider_skips_auth(self) -> None:
         config = Config()
-        config.neurologist = SurgeonConfig(provider="llamacpp", endpoint="http://127.0.0.1:8080/v1")
+        config.neurologist = SurgeonConfig(provider="llamacpp", endpoint="http://127.0.0.1:8082/v1")
         plan = diagnose_auth("neurologist", config)
         assert plan.status == "local_no_auth"
         assert plan.resolved is True
@@ -229,7 +229,7 @@ class TestDiagnoseAuth:
         monkeypatch.delenv("OPENAI_API_KEY", raising=False)
         config = Config()
         with patch("three_surgeons.core.secrets.detect_local_backend", return_value=[
-            {"provider": "llamacpp", "port": 8080, "endpoint": "http://127.0.0.1:8080/v1", "models": ["gpt-oss-20b"]}
+            {"provider": "llamacpp", "port": 8082, "endpoint": "http://127.0.0.1:8082/v1", "models": ["qwen3.6-35b"]}
         ]):
             plan = diagnose_auth("cardiologist", config)
         assert len(plan.local_alternatives) > 0

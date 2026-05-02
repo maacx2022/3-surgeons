@@ -208,9 +208,9 @@ All tools available via `3s serve` HTTP bridge. See `three_surgeons/config/ide-a
 
 | Mode | Cardiologist | Neurologist | Needs | Cost |
 |------|-------------|-------------|-------|------|
-| **Hybrid** (default) | OpenAI GPT-5.2 | Local llama.cpp gpt-oss-20b | 1 API key + llama.cpp | ~$0.008/query |
+| **Hybrid** (default) | OpenAI GPT-5.2 | Local llama.cpp qwen3.6-35b | 1 API key + llama.cpp | ~$0.008/query |
 | **API-Only** | OpenAI GPT-5.2 | DeepSeek deepseek-reasoner | 2 API keys | ~$0.02/query |
-| **Local-Only** | llama.cpp gpt-oss-20b | llama.cpp gpt-oss-20b | llama.cpp server | $0 |
+| **Local-Only** | llama.cpp qwen3.6-35b | llama.cpp qwen3.6-35b | llama.cpp server | $0 |
 
 Run `3s init` to pick a mode, or copy a preset directly:
 

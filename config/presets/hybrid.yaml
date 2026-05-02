@@ -1,6 +1,6 @@
 # 3-Surgeons: Hybrid Mode (Recommended)
 # Cardiologist uses OpenAI API, Neurologist uses a local llama.cpp server.
-# Required: OPENAI_API_KEY + llama.cpp server running on port 8080
+# Required: OPENAI_API_KEY + llama.cpp server running on port 8082
 # Run '3s init' to auto-detect your local backend and model aliases.
 surgeons:
   cardiologist:
@@ -12,8 +12,8 @@ surgeons:
   neurologist:
     role: "Local intelligence — pattern recognition, corrigibility"
     provider: llamacpp
-    endpoint: http://127.0.0.1:8080/v1
-    model: gpt-oss-20b
+    endpoint: http://127.0.0.1:8082/v1
+    model: qwen3.6-35b
 
 state:
   backend: sqlite

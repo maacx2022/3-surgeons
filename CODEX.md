@@ -72,7 +72,7 @@ All three surgeons should report reachable.
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `OPENAI_API_KEY` | Yes (hybrid/API mode) | OpenAI key for Cardiologist (GPT-4.1-mini) |
-| Local llama.cpp endpoint | No | Set the llama.cpp server URL in the preset or config (default: `http://127.0.0.1:8080/v1`) |
+| Local llama.cpp endpoint | No | Set the llama.cpp server URL in the preset or config (default: `http://127.0.0.1:8082/v1`) |
 | `DEEPSEEK_API_KEY` | No | DeepSeek key for API-Only mode Neurologist |
 
 Set these in your shell profile (`~/.zshrc`, `~/.bashrc`) or pass via Codex:
@@ -109,7 +109,7 @@ cp ~/.3surgeons/plugin/config/presets/api-only.yaml ~/.3surgeons/config.yaml
 **Surgeon unreachable**
 - Run `3s probe` to see which surgeon fails
 - Check `OPENAI_API_KEY` is set in the environment Codex runs in
-- For local Neurologist: ensure `llama.cpp` server is running (`llama-server -m <model>.gguf --port 8080`)
+- For local Neurologist: ensure `llama.cpp` server is running (`llama-server -m <model>.gguf --port 8082`)
 
 **Windows**
 - The `bin/3surgeons-mcp` launcher is Bash. On Windows, call Python directly:

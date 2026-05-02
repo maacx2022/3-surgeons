@@ -81,15 +81,15 @@ class TestCreateLlamaCppProvider:
         """Create LLMProvider from llama.cpp config, verify fields and _is_local."""
         config = SurgeonConfig(
             provider="llamacpp",
-            endpoint="http://127.0.0.1:8080/v1",
-            model="gpt-oss-20b",
+            endpoint="http://127.0.0.1:8082/v1",
+            model="qwen3.6-35b",
             api_key_env="",
             role="local",
         )
         provider = create_provider(config)
         assert isinstance(provider, LLMProvider)
-        assert provider.model == "gpt-oss-20b"
-        assert provider.endpoint == "http://127.0.0.1:8080/v1"
+        assert provider.model == "qwen3.6-35b"
+        assert provider.endpoint == "http://127.0.0.1:8082/v1"
         assert provider._is_local is True
 
 
@@ -108,8 +108,8 @@ class TestCostCalculation:
         assert cost == pytest.approx(0.00875)
 
     def test_local_model_zero_cost(self) -> None:
-        """estimate_cost for gpt-oss-20b (unknown/local model) returns 0.0."""
-        cost = estimate_cost("gpt-oss-20b", tokens_in=5000, tokens_out=2000)
+        """estimate_cost for qwen3.6-35b (unknown/local model) returns 0.0."""
+        cost = estimate_cost("qwen3.6-35b", tokens_in=5000, tokens_out=2000)
         assert cost == 0.0
 
     def test_gpt41_cost(self) -> None:

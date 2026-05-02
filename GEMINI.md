@@ -108,7 +108,7 @@ Once connected, these MCP tools are available in Gemini:
 
 **Surgeon unreachable**
 - Run `probe` to see which surgeon is down
- - For local models: ensure `llama.cpp` server is running (`llama-server -m <model>.gguf --port 8080`)
+- For local models: ensure `llama.cpp` server is running (`llama-server -m <model>.gguf --port 8082`)
 - For API models: verify API key is set in environment
 
 **Auto-bootstrap failed**

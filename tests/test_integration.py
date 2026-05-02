@@ -271,7 +271,7 @@ class TestConfigDiscoveryIntegration:
         monkeypatch.setattr(Path, "home", lambda: tmp_path)
         config = Config.discover(project_dir=tmp_path)
         assert config.cardiologist.model == "gpt-5.2"
-        assert config.neurologist.model == "gpt-oss-20b"
+        assert config.neurologist.model == "qwen3.6-35b"
         assert config.budgets.daily_external_usd == 5.0
 
     def test_project_config_overrides_defaults(self, tmp_path, monkeypatch):
@@ -296,7 +296,7 @@ class TestConfigDiscoveryIntegration:
         assert config.cardiologist.model == "gpt-4.1"
         assert config.budgets.daily_external_usd == 10.0
         # Neurologist should still be default
-        assert config.neurologist.model == "gpt-oss-20b"
+        assert config.neurologist.model == "qwen3.6-35b"
 
     def test_config_round_trip_from_yaml(self, tmp_path):
         """Config written to YAML and read back should preserve values."""
@@ -311,9 +311,9 @@ class TestConfigDiscoveryIntegration:
                     "api_key_env": "MY_KEY",
                 },
                 "neurologist": {
-                    "provider": "ollama",
-                    "model": "qwen3:4b",
-                    "endpoint": "http://localhost:11434/v1",
+                    "provider": "llamacpp",
+                    "model": "qwen3.6-35b",
+                    "endpoint": "http://127.0.0.1:8082/v1",
                 },
             },
             "budgets": {"daily_external_usd": 3.0, "autonomous_ab_usd": 1.5},
@@ -324,7 +324,7 @@ class TestConfigDiscoveryIntegration:
         config = Config.from_yaml(config_path)
         assert config.cardiologist.model == "gpt-4.1-mini"
         assert config.cardiologist.api_key_env == "MY_KEY"
-        assert config.neurologist.provider == "ollama"
+        assert config.neurologist.provider == "llamacpp"
         assert config.budgets.daily_external_usd == 3.0
         assert config.budgets.autonomous_ab_usd == 1.5
 

@@ -17,7 +17,7 @@ import httpx
 
 # Known local LLM backends: (provider_name, default_port, models_endpoint_path)
 LOCAL_BACKENDS = [
-    ("llamacpp", 8080, "/v1/models"),
+    ("llamacpp", 8082, "/v1/models"),
     ("ollama", 11434, "/v1/models"),
     ("mlx", 5044, "/v1/models"),
     ("vllm", 8000, "/v1/models"),
@@ -261,8 +261,8 @@ class Config:
     cardiologist: SurgeonConfig = field(default_factory=lambda: _default_cardiologist())
     neurologist: SurgeonConfig = field(default_factory=lambda: SurgeonConfig(
         provider="llamacpp",
-        endpoint="http://127.0.0.1:8080/v1",
-        model="gpt-oss-20b",
+        endpoint="http://127.0.0.1:8082/v1",
+        model="qwen3.6-35b",
         api_key_env="",
         role="Local intelligence -- pattern recognition, corrigibility",
     ))

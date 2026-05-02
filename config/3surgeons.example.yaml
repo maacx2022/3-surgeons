@@ -16,8 +16,8 @@ surgeons:
   neurologist:
     role: "Local intelligence — pattern recognition, corrigibility"
     provider: llamacpp
-    endpoint: http://127.0.0.1:8080/v1
-    model: gpt-oss-20b
+    endpoint: http://127.0.0.1:8082/v1
+    model: qwen3.6-35b
     # api_key_env: not needed for local models
 
 # State backend: sqlite (default, zero deps) | redis (distributed) | memory (testing)

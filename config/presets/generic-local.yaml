@@ -6,13 +6,13 @@ surgeons:
   cardiologist:
     role: "External perspective — cross-examination, evidence"
     provider: llamacpp
-    endpoint: http://127.0.0.1:8080/v1
-    model: gpt-oss-20b
+    endpoint: http://127.0.0.1:8082/v1
+    model: qwen3.6-35b
   neurologist:
     role: "Local intelligence — pattern recognition, corrigibility"
     provider: llamacpp
-    endpoint: http://127.0.0.1:8080/v1
-    model: gpt-oss-20b
+    endpoint: http://127.0.0.1:8082/v1
+    model: qwen3.6-35b
 
 state:
   backend: sqlite

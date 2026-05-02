@@ -152,15 +152,15 @@ def init(detect: bool) -> None:
         # Manual config (custom wizard)
         # Pre-fill defaults from detected backend if available
         detected = backends[0] if backends else None
-        default_neuro_provider = detected["provider"] if detected else "ollama"
-        default_neuro_endpoint = detected["endpoint"] if detected else "http://localhost:11434/v1"
-        default_neuro_model = detected["models"][0] if detected and detected["models"] else "qwen3:4b"
+        default_neuro_provider = detected["provider"] if detected else "llamacpp"
+        default_neuro_endpoint = detected["endpoint"] if detected else "http://127.0.0.1:8082/v1"
+        default_neuro_model = detected["models"][0] if detected and detected["models"] else "qwen3.6-35b"
 
         click.echo("\n--- Cardiologist (external model) ---")
         cardio_provider = click.prompt("Provider", default="openai")
-        cardio_model = click.prompt("Model", default="gpt-4.1-mini")
+        cardio_model = click.prompt("Model", default="gpt-5.2")
         cardio_endpoint = click.prompt("Endpoint", default="https://api.openai.com/v1")
-        cardio_api_key_env = click.prompt("API key env var", default="Context_DNA_OPENAI")
+        cardio_api_key_env = click.prompt("API key env var", default="OPENAI_API_KEY")
 
         click.echo(f"\n--- Neurologist (detected: {default_neuro_provider}) ---")
         neuro_provider = click.prompt("Provider", default=default_neuro_provider)

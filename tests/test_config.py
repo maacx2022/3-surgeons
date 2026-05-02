@@ -26,8 +26,8 @@ class TestLoadFromYaml:
                 },
                 "neurologist": {
                     "provider": "llamacpp",
-                    "endpoint": "http://127.0.0.1:8080/v1",
-                    "model": "gpt-oss-20b",
+                    "endpoint": "http://127.0.0.1:8082/v1",
+                    "model": "qwen3.6-35b",
                     "role": "Local intelligence",
                 },
             },
@@ -51,8 +51,8 @@ class TestLoadFromYaml:
         assert cfg.cardiologist.role == "External perspective"
 
         assert cfg.neurologist.provider == "llamacpp"
-        assert cfg.neurologist.endpoint == "http://127.0.0.1:8080/v1"
-        assert cfg.neurologist.model == "gpt-oss-20b"
+        assert cfg.neurologist.endpoint == "http://127.0.0.1:8082/v1"
+        assert cfg.neurologist.model == "qwen3.6-35b"
         assert cfg.neurologist.role == "Local intelligence"
 
         assert cfg.budgets.daily_external_usd == 10.0
@@ -73,8 +73,8 @@ class TestLoadDefaults:
         assert cfg.cardiologist.api_key_env == "OPENAI_API_KEY"
 
         assert cfg.neurologist.provider == "llamacpp"
-        assert cfg.neurologist.model == "gpt-oss-20b"
-        assert cfg.neurologist.endpoint == "http://127.0.0.1:8080/v1"
+        assert cfg.neurologist.model == "qwen3.6-35b"
+        assert cfg.neurologist.endpoint == "http://127.0.0.1:8082/v1"
 
         assert cfg.budgets.daily_external_usd == 5.0
         assert cfg.budgets.autonomous_ab_usd == 2.0
@@ -200,7 +200,7 @@ class TestConfigDiscovery:
 
         # Should be defaults
         assert cfg.cardiologist.model == "gpt-5.2"
-        assert cfg.neurologist.model == "gpt-oss-20b"
+        assert cfg.neurologist.model == "qwen3.6-35b"
 
 
 class TestEvidencePath:
